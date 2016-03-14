@@ -101,7 +101,7 @@ Firebase provides a way to receive events when data changes in your database via
 aiofirebase can listen for these events, and send each event received to a callback of your choice.
 
 ```python
->>> def mycallback(event, data):
+>>> async def mycallback(event, data):
 ...     print('{} event received.'.format(event))
 ...
 >>> await firebase.stream(callback=mycallback, path='dinosaurs')
