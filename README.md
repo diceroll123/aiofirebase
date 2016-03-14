@@ -1,5 +1,7 @@
 # aiofirebase
 
+[![PyPI version](https://badge.fury.io/py/aiofirebase.svg)](https://badge.fury.io/py/aiofirebase)
+
 asyncio (PEP 3156) Firebase client library.
 
 ## Install
