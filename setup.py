@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name='aiofirebase',
-    version='0.1.0',
+    version='0.2.0',
     packages=find_packages(),
     description='Asyncio Firebase client library',
     author='Billy Shambrook',
