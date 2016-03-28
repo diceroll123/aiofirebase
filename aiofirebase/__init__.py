@@ -86,6 +86,7 @@ class FirebaseHTTP:
     async def _request(self, *, method, value=None, path=None, params=None):
         """Perform a request to Firebase."""
         url = posixpath.join(self._base_url, path.strip('/')) if path else self._base_url
+        url += '.json'
         data = json.dumps(value) if value else None
         async with self._session.request(method, url, data=data, params=params) as resp:
             assert resp.status == 200

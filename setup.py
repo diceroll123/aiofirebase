@@ -9,7 +9,7 @@ setup(
     packages=find_packages(),
     description='Asyncio Firebase client library',
     author='Billy Shambrook',
-    email='billy.shambrook@gmail.com',
+    author_email='billy.shambrook@gmail.com',
     install_requires=['aiohttp'],
     keywords=['firebase', 'asyncio', 'aiohttp'],
     url='https://github.com/billyshambrook/aiofirebase'

@@ -64,15 +64,15 @@ async def test_request(http_client):
     """Test ClientSession.request arguments."""
     await http_client._request(method='GET')
     assert http_client._session.request.called
-    http_client._session.request.assert_called_with('GET', 'http://mydatabase', data=None, params=None)
+    http_client._session.request.assert_called_with('GET', 'http://mydatabase.json', data=None, params=None)
 
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("test_input,expected", [
-    (None, 'http://mydatabase'),
-    ('app/users', 'http://mydatabase/app/users'),
-    ('/app/users', 'http://mydatabase/app/users'),
-    ('/app/users/', 'http://mydatabase/app/users'),
+    (None, 'http://mydatabase.json'),
+    ('app/users', 'http://mydatabase/app/users.json'),
+    ('/app/users', 'http://mydatabase/app/users.json'),
+    ('/app/users/', 'http://mydatabase/app/users.json'),
 ])
 async def test_request_path(http_client, test_input, expected):
     """Test ClientSession.request arguments for different path values."""
@@ -86,7 +86,8 @@ async def test_request_value(http_client):
     """Test ClientSession.request arguments when a value is provided."""
     await http_client._request(method='POST', value={'hello': 'world'})
     assert http_client._session.request.called
-    http_client._session.request.assert_called_with('POST', 'http://mydatabase', data='{"hello": "world"}', params=None)
+    http_client._session.request.assert_called_with(
+        'POST', 'http://mydatabase.json', data='{"hello": "world"}', params=None)
 
 
 @pytest.mark.asyncio
@@ -94,7 +95,8 @@ async def test_request_params(http_client):
     """Test ClientSession.request arguments when params are provided."""
     await http_client._request(method='POST', params={'hello': 'world'})
     assert http_client._session.request.called
-    http_client._session.request.assert_called_with('POST', 'http://mydatabase', data=None, params={'hello': 'world'})
+    http_client._session.request.assert_called_with(
+        'POST', 'http://mydatabase.json', data=None, params={'hello': 'world'})
 
 
 @pytest.mark.asyncio
