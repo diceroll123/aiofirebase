@@ -75,7 +75,9 @@ class FirebaseHTTP:
 
             key, value = msg_str.split(': ', 1)
 
-            if key == 'event' and value == 'cancel':
+            if key == 'keep-alive':
+                continue
+            elif key == 'event' and value == 'cancel':
                 raise StreamCancelled('The requested location is no longer allowed due to security/rules changes.')
             elif key == 'event' and value == 'auth_revoked':
                 raise StreamAuthRevoked('The auth credentials has expired.')
@@ -83,13 +85,14 @@ class FirebaseHTTP:
                 event = value
             elif key == 'data':
                 data = json.loads(value)
-                data['event'] = event
-                if stream_id:
-                    data['stream_id'] = stream_id
-                if asyncio.iscoroutinefunction(callback):
-                    await callback(message=data)
-                else:
-                    callback(message=data)
+                if data:
+                    data['event'] = event
+                    if stream_id:
+                        data['stream_id'] = stream_id
+                    if asyncio.iscoroutinefunction(callback):
+                        await callback(message=data)
+                    else:
+                        callback(message=data)
 
     async def _request(self, *, method, value=None, path=None, params=None):
         """Perform a request to Firebase."""
