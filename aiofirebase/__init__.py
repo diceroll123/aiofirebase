@@ -84,7 +84,10 @@ class FirebaseHTTP:
             elif key == 'data':
                 data = json.loads(value)
                 data['event'] = event
-                await callback(message=data)
+                if asyncio.iscoroutinefunction(callback):
+                    await callback(message=data)
+                else:
+                    callback(message=data)
 
     async def _request(self, *, method, value=None, path=None, params=None):
         """Perform a request to Firebase."""
