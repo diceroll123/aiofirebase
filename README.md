@@ -12,6 +12,12 @@ aiofirebase requires Python 3.5 or above.
 $ pip install aiofirebase
 ```
 
+_for this fork of mine:_
+
+```bash
+$ python -m pip install -U git+https://github.com/diceroll123/aiofirebase
+```
+
 ## Usage
 
 ### Setup
