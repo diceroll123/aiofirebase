@@ -55,17 +55,17 @@ class FirebaseHTTP:
         """Perform a DELETE request."""
         return await self._request(method='DELETE', path=path, params=params)
 
-    async def stream(self, *, callback, path=None):
+    async def stream(self, *, callback, path=None, stream_id=None):
         """Hook up to the EventSource stream."""
         url = posixpath.join(self._base_url, path) if path else self._base_url
         url += '.json'
         headers = {'accept': 'text/event-stream'}
         async with self._session.get(url, headers=headers, timeout=None) as resp:
             while True:
-                await FirebaseHTTP._iterate_over_stream(resp.content, callback)
+                await FirebaseHTTP._iterate_over_stream(resp.content, callback, stream_id=stream_id)
 
     @staticmethod
-    async def _iterate_over_stream(iterable, callback):
+    async def _iterate_over_stream(iterable, callback, stream_id):
         """Iterate over the EventSource stream and pass the event and data to the callback as and when we receive it."""
         async for msg in iterable:
             msg_str = msg.decode('utf-8').strip()
@@ -84,6 +84,8 @@ class FirebaseHTTP:
             elif key == 'data':
                 data = json.loads(value)
                 data['event'] = event
+                if stream_id:
+                    data['stream_id'] = stream_id
                 if asyncio.iscoroutinefunction(callback):
                     await callback(message=data)
                 else:
