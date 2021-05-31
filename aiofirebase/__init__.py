@@ -69,6 +69,7 @@ class FirebaseHTTP:
     @staticmethod
     async def _iterate_over_stream(iterable, callback, stream_id):
         """Iterate over the EventSource stream and pass the event and data to the callback as and when we receive it."""
+        event = None
         async for msg in iterable:
             msg_str = msg.decode('utf-8').strip()
 
@@ -87,7 +88,7 @@ class FirebaseHTTP:
                 event = value
             elif key == 'data':
                 data = json.loads(value)
-                if data:
+                if data and event:
                     data["event"] = event
                     data["stream_id"] = stream_id
                     if asyncio.iscoroutinefunction(callback):
