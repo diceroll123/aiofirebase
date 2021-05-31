@@ -62,7 +62,9 @@ class FirebaseHTTP:
         headers = {'accept': 'text/event-stream'}
         async with self._session.get(url, headers=headers, timeout=None) as resp:
             while True:
-                await FirebaseHTTP._iterate_over_stream(resp.content, callback, stream_id=stream_id)
+                await FirebaseHTTP._iterate_over_stream(
+                    resp.content, callback, stream_id=stream_id or path
+                )
 
     @staticmethod
     async def _iterate_over_stream(iterable, callback, stream_id):
@@ -86,9 +88,8 @@ class FirebaseHTTP:
             elif key == 'data':
                 data = json.loads(value)
                 if data:
-                    data['event'] = event
-                    if stream_id:
-                        data['stream_id'] = stream_id
+                    data["event"] = event
+                    data["stream_id"] = stream_id
                     if asyncio.iscoroutinefunction(callback):
                         await callback(message=data)
                     else:
