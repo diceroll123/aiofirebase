@@ -82,7 +82,9 @@ class FirebaseHTTP:
             elif key == 'event':
                 event = value
             elif key == 'data':
-                await callback(event=event, data=json.loads(value))
+                data = json.loads(value)
+                data['event'] = event
+                await callback(message=data)
 
     async def _request(self, *, method, value=None, path=None, params=None):
         """Perform a request to Firebase."""
