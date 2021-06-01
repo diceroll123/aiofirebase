@@ -1,5 +1,6 @@
 """aiofirebase package."""
 import asyncio
+import functools
 import json
 import posixpath
 from typing import Any, Callable, Dict, Literal, Optional, TypedDict
@@ -137,9 +138,13 @@ class FirebaseHTTP:
                     data["event"] = event
                     data["stream_id"] = stream_id
                     if asyncio.iscoroutinefunction(callback):
-                        await callback(message=data)
+                        func = callback(data)
                     else:
-                        callback(message=data)
+                        func = asyncio.get_event_loop().run_in_executor(
+                            None, functools.partial(callback, data)
+                        )
+
+                    asyncio.create_task(func)
 
     async def _request(self, *, method, value=None, path=None, params=None):
         """Perform a request to Firebase."""
