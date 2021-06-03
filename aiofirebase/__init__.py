@@ -105,10 +105,9 @@ class FirebaseHTTP:
         url += ".json"
         headers = {"accept": "text/event-stream"}
         async with self._session.get(url, headers=headers, timeout=None) as resp:
-            while True:
-                await FirebaseHTTP._iterate_over_stream(
-                    resp.content, callback, stream_id=stream_id or path
-                )
+            await FirebaseHTTP._iterate_over_stream(
+                resp.content, callback, stream_id=stream_id or path
+            )
 
     @staticmethod
     async def _iterate_over_stream(iterable, callback, stream_id):
